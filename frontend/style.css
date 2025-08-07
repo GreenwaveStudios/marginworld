@@ -44,6 +44,21 @@ body, html {
   -webkit-transform: translateX(-50%);
   left: 50%; }
 
+  .bonzi_admin_tag {
+    color: #fff;
+    background: #d9534f;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    left: 0;
+    z-index: 2;
+}
+
 body {
   background-color: #421f60; }
 
@@ -260,7 +275,7 @@ body.vaporwave #chat_send {
     background-position: 0 -56px; }
 
 #content {
-  background-color: #6d33a0;
+  background-color: #7899f7;
   background-image: url("../img/desktop/logo.png"), url("../img/desktop/bg.png");
   background-position: top left, center;
   background-repeat: no-repeat; }

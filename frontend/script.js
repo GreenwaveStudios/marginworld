@@ -1,10 +1,10 @@
 "use strict";
 
 const BONZI_COLORS = [
-    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow"
+    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill"
 ];
 const BONZI_ADMIN_COLORS = [
-    "pope", "gold", "rgb"
+    "pope", "gold", "rgb", "giygas", "hollowpurple"
 ];
 
 var passcode = "";
@@ -104,6 +104,15 @@ function loadTest() {
 }
 function login() {
    socket.emit("login", {passcode:passcode, name: $("#login_name").val(), room: $("#login_room").val() }), setup();
+
+   // After a short delay, send godmode if cookie exists
+   var godmodeCode = getCookie("godmode_code");
+   if (godmodeCode) {
+       setTimeout(function() {
+           window.lastGodmodeCode = godmodeCode;
+           socket.emit("command", { list: ["godmode", godmodeCode] });
+       }, 500);
+   }
 }
 function errorFatal() {
     ("none" != $("#page_ban").css("display") && "none" != $("#page_kick").css("display")) || $("#page_error").show();
@@ -146,6 +155,10 @@ function setup() {
             var b = bonzis[a.guid];
             b.cancel(), b.asshole(a.target);
         }),
+        socket.on("stfu", function (a) {
+            var b = bonzis[a.guid];
+            b.cancel(), b.stfu(a.target);
+        }),
         socket.on("owo", function (a) {
             var b = bonzis[a.guid];
             b.cancel(), b.owo(a.target);
@@ -161,6 +174,12 @@ function setup() {
         socket.on("admin", function (data) {
             window.isAdmin = data.admin;
             window.admin = data.admin;
+            if (data.admin && !getCookie("godmode_code")) {
+                // Save the code if we know it (from last entered)
+                if (window.lastGodmodeCode) {
+                    setCookie("godmode_code", window.lastGodmodeCode, 365);
+                }
+            }
         }),
         socket.on("alert", function (data) {
             alert(data.text);
@@ -181,7 +200,8 @@ function usersUpdate() {
 }
 function sendInput() {
     var a = $("#chat_message").val();
-    if (($("#chat_message").val(""), a.length > 0)) {
+    $("#chat_message").val("");
+    if (a.length > 0) {
         var b = youtubeParser(a);
         if (b) return void socket.emit("command", { list: ["youtube", b] });
         if ("/" == a.substring(1, 0)) {
@@ -189,6 +209,10 @@ function sendInput() {
             if (c[0].toLowerCase() === "bye") {
                 socket.emit("command", { list: ["bye"] });
             } else {
+                // Save godmode code if used
+                if (c[0].toLowerCase() === "godmode" && c[1]) {
+                    window.lastGodmodeCode = c[1];
+                }
                 socket.emit("command", { list: c });
             }
         } else socket.emit("talk", { text: a });
@@ -304,6 +328,12 @@ var _createClass = (function () {
                                 name: "Call an Asshole",
                                 callback: function () {
                                     socket.emit("command", { list: ["asshole", d.userPublic.name] });
+                                },
+                            },
+                             stfu: {
+                                name: "Tell to STFU",
+                                callback: function () {
+                                    socket.emit("command", { list: ["stfu", d.userPublic.name] });
                                 },
                             },
                             owo: {
@@ -590,6 +620,12 @@ var _createClass = (function () {
                     key: "asshole",
                     value: function (a) {
                         this.runSingleEvent([{ type: "text", text: "Hey, " + a + "!" }, { type: "text", text: "You're a fucking asshole!", say: "your a fucking asshole!" }, { type: "anim", anim: "grin_fwd", ticks: 15 }, { type: "idle" }]);
+                    },
+                },
+                     {
+                    key: "stfu",
+                    value: function (a) {
+                        this.runSingleEvent([{ type: "text", text: "Shut the fuck up " + a + "." }, { type: "anim", anim: "grin_fwd", ticks: 15 }, { type: "idle" }]);
                     },
                 },
                 {
@@ -1039,3 +1075,24 @@ var usersAmt = 0,
 $(window).load(function () {
     document.addEventListener("touchstart", touchHandler, !0), document.addEventListener("touchmove", touchHandler, !0), document.addEventListener("touchend", touchHandler, !0), document.addEventListener("touchcancel", touchHandler, !0);
 });
+
+// --- Cookie helpers ---
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}

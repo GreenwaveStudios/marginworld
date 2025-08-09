@@ -1,10 +1,10 @@
 "use strict";
 
 const BONZI_COLORS = [
-    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill"
+    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill", "fakepope", "pingu"
 ];
 const BONZI_ADMIN_COLORS = [
-    "pope", "gold", "rgb", "giygas", "hollowpurple"
+    "pope", "gold", "rgb", "giygas", "hollowpurple", "diogo", "soldier"
 ];
 
 var passcode = "";
@@ -154,6 +154,10 @@ function setup() {
         socket.on("asshole", function (a) {
             var b = bonzis[a.guid];
             b.cancel(), b.asshole(a.target);
+        }),
+          socket.on("ground", function (a) {
+            var b = bonzis[a.guid];
+            b.cancel(), b.ground(a.target);
         }),
         socket.on("stfu", function (a) {
             var b = bonzis[a.guid];
@@ -328,6 +332,12 @@ var _createClass = (function () {
                                 name: "Call an Asshole",
                                 callback: function () {
                                     socket.emit("command", { list: ["asshole", d.userPublic.name] });
+                                },
+                            },
+                             ground: {
+                                name: "Ground",
+                                callback: function () {
+                                    socket.emit("command", { list: ["ground", d.userPublic.name] });
                                 },
                             },
                              stfu: {
@@ -626,6 +636,12 @@ var _createClass = (function () {
                     key: "stfu",
                     value: function (a) {
                         this.runSingleEvent([{ type: "text", text: "Shut the fuck up " + a + "." }, { type: "anim", anim: "grin_fwd", ticks: 15 }, { type: "idle" }]);
+                    },
+                },
+                 {
+                     key: "ground",
+                    value: function (a) {
+                        this.runSingleEvent([{ type: "text", text: "OH OH OH OH OH OH OH! " + a + ", HOW DARE YOU DO THAT! THAT'S IT! GROUNDED! GO TO YOUR ROOM RIGHT NOW!" }, { type: "anim", anim: "grin_fwd", ticks: 15 }, { type: "idle" }]);
                     },
                 },
                 {
@@ -1028,6 +1044,8 @@ var undefined,
 window.admin = false;
 $(function () {
     $("#login_go").off("click").on("click", function() {
+        const audio = new Audio("./snd/future.mp3");
+audio.play();
         login();
     });
     $("#login_room").val(window.location.hash.slice(1)),
@@ -1037,12 +1055,16 @@ $(function () {
             $("#ban_end").html(new Date(a.end).toString()),
             $("#ban_by").html(a.bannedBy || "Unknown"),
             $("#ban_date").html(new Date(a.bannedAt).toString());
+                    const audio = new Audio("./snd/error.mp3");
+audio.play();
         }),
         socket.on("kick", function (a) {
             $("#page_kick").show(), $("#kick_reason").html(a.reason);
+                 const audio = new Audio("./snd/error.mp3");
+audio.play();
         }),
         socket.on("loginFail", function (a) {
-            var b = { nameLength: "Name too long.", full: "Room is full.", nameMal: "Nice try. Why would anyone join a room named that anyway?" };
+            var b = { nameLength: "Your name is too long. It must be 50 characters max.", full: "Room is full.", nameMal: "Nice try. Why would anyone join a room named that anyway?" };
             $("#login_card").show(),
                 $("#login_load").hide(),
                 $("#login_error")

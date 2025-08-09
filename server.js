@@ -1,10 +1,10 @@
 // Add these near the top of your server.js, before any usage:
 // Add these near the top, after config loading:
 const BONZI_COLORS = [
-    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill"
+    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill", "fakepope", "pingu"
 ];
 const BONZI_ADMIN_COLORS = [
-    "pope", "gold", "rgb", "giygas", "hollowpurple"
+    "pope", "gold", "rgb", "giygas", "hollowpurple", "diogo", "soldier"
 ];
 
 // In the 'color' command, restrict admin-only colors:
@@ -241,6 +241,11 @@ const userPublic = {
           case 'stfu':
         // args[0] = target name
         io.to(room).emit('stfu', { guid, target: args[0] || '' });
+        break;
+
+             case 'ground':
+        // args[0] = target name
+        io.to(room).emit('ground', { guid, target: args[0] || '' });
         break;
 
       case 'owo':

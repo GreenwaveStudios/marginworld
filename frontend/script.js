@@ -1,7 +1,7 @@
 "use strict";
 
 const BONZI_COLORS = [
-    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill", "fakepope", "pingu"
+    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill", "fakepope", "pingu", "raretrox", "copilot", "logos"
 ];
 const BONZI_ADMIN_COLORS = [
     "pope", "gold", "rgb", "giygas", "hollowpurple", "diogo", "soldier"

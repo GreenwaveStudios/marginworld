@@ -1,7 +1,7 @@
 // Add these near the top of your server.js, before any usage:
 // Add these near the top, after config loading:
 const BONZI_COLORS = [
-    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill", "fakepope", "pingu"
+    "black", "blue", "brown", "green", "purple", "red", "pink", "cyan", "yellow", "scot", "doggiskill", "fakepope", "pingu", "raretrox", "copilot", "logos"
 ];
 const BONZI_ADMIN_COLORS = [
     "pope", "gold", "rgb", "giygas", "hollowpurple", "diogo", "soldier"
@@ -20,7 +20,7 @@ const cors = require('cors');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 8080;
 
 const frontendDir = path.join(__dirname, 'frontend');
 

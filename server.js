@@ -51,7 +51,7 @@ app.use(express.static(frontendDir));
 
 // Serve index.html for the root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(frontendDir, 'index.html'));
+  res.sendFile(path.join(frontendDir, 'indexreal.html'));
 });
 
 // Create HTTP server and attach socket.io
